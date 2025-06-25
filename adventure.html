@@ -1,3 +1,41 @@
+<link href="https://fonts.googleapis.com/css2?family=Newsreader&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap" rel="stylesheet">
+
+<style>
+/*   @import url('https://fonts.googleapis.com/css2?family=Newsreader');
+  @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab');
+ */
+  #college-path-game {
+    font-family: 'Newsreader', Arial, sans-serif;
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    border: 2px solid #073763;
+    border-radius: 10px;
+    background-color: #f4faff;
+  }
+
+  #college-path-game h2 {
+    font-family: 'Zilla Slab', Arial sans-serif;
+    color: #073763;
+  }
+
+  #college-path-game button {
+    margin: 5px;
+    padding: 10px 15px;
+    font-family: 'Newsreader', Arial, sans-serif;
+    cursor: pointer;
+    border: none;
+    background-color: #073763;
+    color: white;
+    border-radius: 5px;
+  }
+
+  #college-path-game button:hover {
+    background-color: #0a4e9e;
+  }
+</style>
+
 <div id="college-path-game">
   <h2>Choose Your College Path</h2>
   <p id="game-text">You're thinking about your future — what's most important to you right now?</p>
@@ -45,7 +83,7 @@
     } else if (path === "associate") {
       result = "<strong>2-Year Associate Degree:</strong> These programs take about 2 years and prepare you for jobs in healthcare, business, or IT — or you can transfer later to a 4-year college.";
     } else if (path === "transfer") {
-      result = "<strong>📤 Start at Community College + Transfer:</strong> This is a flexible and affordable path. You can explore your interests, build credits, and move into a 4-year degree later with less cost.";
+      result = "<strong>Start at Community College + Transfer:</strong> This is a flexible and affordable path. You can explore your interests, build credits, and move into a 4-year degree later with less cost.";
     } else if (path === "fourYear") {
       result = "<strong>4-Year Bachelor’s Degree:</strong> If you’re ready to jump in, a 4-year degree can lead to careers in education, law, business, and more. Many schools have support programs for first-gen and non-traditional students.";
     } else if (path === "undecided") {
@@ -57,21 +95,3 @@
   }
 </script>
 
-<style>
-  #college-path-game{
-    font-family: Arial, sans-serif; 
-    width: 80%; 
-    margin: auto; 
-    padding: 20px; 
-    border: 2px solid #073763; 
-    border-radius: 10px; 
-    background-color: #f4faff;
-  }
-
-  h2{
-    color: #073763;
-  }
-
-  button{
-    margin: 5px;
-</style>
