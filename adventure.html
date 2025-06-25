@@ -1,0 +1,58 @@
+<div id="college-path-game" style="font-family: Arial, sans-serif; width: 80%; margin: auto; padding: 20px; border: 2px solid #073763; border-radius: 10px; background-color: #f4faff;">
+  <h2 style="color: #073763;">Choose Your College Path</h2>
+  <p id="game-text">You're thinking about your future — what's most important to you right now?</p>
+
+  <div id="game-choices">
+    <button onclick="chooseStage1('fast')" style="margin: 5px;">Get a career fast</button>
+    <button onclick="chooseStage1('explore')" style="margin: 5px;">Explore options</button>
+    <button onclick="chooseStage1('degree')" style="margin: 5px;">Earn a college degree</button>
+  </div>
+</div>
+
+<script>
+  function chooseStage1(choice) {
+    const text = document.getElementById("game-text");
+    const choices = document.getElementById("game-choices");
+
+    if (choice === "fast") {
+      text.innerHTML = "Do you prefer hands-on work or healthcare/service jobs?";
+      choices.innerHTML = `
+        <button onclick="showResult('certificate')">Hands-on / Trades</button>
+        <button onclick="showResult('associate')">Health or Business</button>
+      `;
+    } else if (choice === "explore") {
+      text.innerHTML = "Do you want to start small and maybe transfer later?";
+      choices.innerHTML = `
+        <button onclick="showResult('transfer')">Yes, start small then transfer</button>
+        <button onclick="showResult('undecided')">I’m really not sure yet</button>
+      `;
+    } else if (choice === "degree") {
+      text.innerHTML = "Would you prefer to start at a 4-year college or begin at a 2-year school and transfer?";
+      choices.innerHTML = `
+        <button onclick="showResult('fourYear')">Start at a 4-Year School</button>
+        <button onclick="showResult('transfer')">Start at Community College</button>
+      `;
+    }
+  }
+
+  function showResult(path) {
+    const text = document.getElementById("game-text");
+    const choices = document.getElementById("game-choices");
+
+    let result = "";
+    if (path === "certificate") {
+      result = "<strong>Certificate Program:</strong> These short-term programs (6 months–1 year) help you learn job-ready skills in areas like automotive, plumbing, culinary, or tech. Great if you want to work quickly and hands-on.";
+    } else if (path === "associate") {
+      result = "<strong>2-Year Associate Degree:</strong> These programs take about 2 years and prepare you for jobs in healthcare, business, or IT — or you can transfer later to a 4-year college.";
+    } else if (path === "transfer") {
+      result = "<strong>📤 Start at Community College + Transfer:</strong> This is a flexible and affordable path. You can explore your interests, build credits, and move into a 4-year degree later with less cost.";
+    } else if (path === "fourYear") {
+      result = "<strong>4-Year Bachelor’s Degree:</strong> If you’re ready to jump in, a 4-year degree can lead to careers in education, law, business, and more. Many schools have support programs for first-gen and non-traditional students.";
+    } else if (path === "undecided") {
+      result = "<strong>Start Exploring:</strong> A community college is a great place to figure things out without pressure. You can try out classes, get support, and switch paths later with no penalty.";
+    }
+
+    text.innerHTML = result;
+    choices.innerHTML = `<p style="margin-top: 20px;"><strong>You can refresh the page to try different choices!</strong></p>`;
+  }
+</script>
