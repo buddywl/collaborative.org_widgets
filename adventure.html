@@ -1,11 +1,11 @@
-<div id="college-path-game" style="font-family: Arial, sans-serif; width: 80%; margin: auto; padding: 20px; border: 2px solid #073763; border-radius: 10px; background-color: #f4faff;">
-  <h2 style="color: #073763;">Choose Your College Path</h2>
+<div id="college-path-game">
+  <h2>Choose Your College Path</h2>
   <p id="game-text">You're thinking about your future — what's most important to you right now?</p>
 
   <div id="game-choices">
-    <button onclick="chooseStage1('fast')" style="margin: 5px;">Get a career fast</button>
-    <button onclick="chooseStage1('explore')" style="margin: 5px;">Explore options</button>
-    <button onclick="chooseStage1('degree')" style="margin: 5px;">Earn a college degree</button>
+    <button onclick="chooseStage1('fast')">Get a career fast</button>
+    <button onclick="chooseStage1('explore')">Explore options</button>
+    <button onclick="chooseStage1('degree')">Earn a college degree</button>
   </div>
 </div>
 
@@ -56,3 +56,22 @@
     choices.innerHTML = `<p style="margin-top: 20px;"><strong>You can refresh the page to try different choices!</strong></p>`;
   }
 </script>
+
+<style>
+  #college-path-game{
+    font-family: Arial, sans-serif; 
+    width: 80%; 
+    margin: auto; 
+    padding: 20px; 
+    border: 2px solid #073763; 
+    border-radius: 10px; 
+    background-color: #f4faff;
+  }
+
+  h2{
+    color: #073763;
+  }
+
+  button{
+    margin: 5px;
+</style>
