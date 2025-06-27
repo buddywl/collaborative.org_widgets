@@ -1,0 +1,107 @@
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Newsreader&family=Zilla+Slab&display=swap" rel="stylesheet">
+
+<style>
+  .unique-features-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-family: 'Newsreader', sans-serif;
+  }
+
+  .feature-card {
+    position: relative;
+    width: 30%;
+    height: fit-content;
+    overflow: hidden;
+    text-align: center;
+    background-color: #ffffff;
+  }
+
+  .feature-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+
+  .feature-card h3 {
+    font-family: 'Zilla Slab', serif;
+    font-size: 1.4em;
+    color: #073763;
+    margin: 10px 0 5px 0;
+  }
+
+  .feature-card p {
+    font-size: 0.95em;
+    padding: 0 10px;
+    color: #222;
+  }
+
+  .feature-hover-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 55, 99, 0.93);
+    color: white;
+    padding: 5%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 1em;
+    text-align: left;
+  }
+
+  .feature-card:hover .feature-hover-info {
+    opacity: 1;
+  }
+
+  .feature-hover-info p {
+    margin-top: 5%;
+    color: white;
+  }
+</style>
+
+<div class="unique-features-container">
+  <!-- Card 1 -->
+  <div class="feature-card">
+    <img src="https://via.placeholder.com/280x160" alt="Clubs">
+    <div>
+      <h3>Students Clubs and Organizations</h3>
+      <p>Clubs provide low-stakes, supportive ways to engage socially and build confidence—whether through creativity, community, advocacy, or leadership. Getting involved can bring structure, positive peer interactions, and a sense of belonging.</p>
+    </div>
+    <div class="feature-hover-info">
+      <p>Bristol offers over 20 student-run clubs spanning cultural, professional, and interest-based groups:</p>
+      <ul>
+        <li>Multicultural groups such as the Black Student Union, LatinX Student Association, Multicultural Club, and LGBTQIA+ club Rainbow Connection foster inclusion and peer support</li>
+        <li>Interest-focused clubs like Gaming Club, Culinary Arts Club, Art & Design Club, Law Club, Communication Club, and Dental Hygiene Club allow students to explore hobbies, professional skills, and creative fields while connecting with peers</li>
+        <li>Leadership opportunities through Student Senate, Honors Program Club, and The Hawk newspaper strengthen voice and responsibility in campus life</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="feature-card">
+    <img src="https://via.placeholder.com/280x160" alt="PLACEHOLDER">
+    <div>
+      <h3>PLACEHOLDER</h3>
+      <p>PLACEHOLDER</p>
+    </div>
+    <div class="feature-hover-info">
+      <p>PLACEHOLDER</p>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="feature-card">
+    <img src="https://via.placeholder.com/280x160" alt="PLACEHOLDER">
+    <div>
+      <h3>PLACEHOLDER</h3>
+      <p>PLACEHOLDER</p>
+    </div>
+    <div class="feature-hover-info">
+      <p>BPLACEHOLDER</p>
+    </div>
+  </div>
+</div>
