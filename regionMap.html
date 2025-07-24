@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Massachusetts Regions Map</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      font-family: sans-serif;
+    }
+
+    .map {
+      display: grid;
+      grid-template-columns: repeat(75, 1fr);
+      width: 750px;
+      gap: 1px;
+    }
+
+    .pixel {
+      width: 10px;
+      height: 10px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .pixel:hover {
+      transform: scale(1.5);
+      z-index: 2;
+    }
+
+    .pixel:hover::after {
+      content: attr(data-label);
+      position: absolute;
+      top: -25px;
+      left: 0;
+      background: #000;
+      color: #fff;
+      font-size: 10px;
+      padding: 2px 4px;
+      border-radius: 3px;
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    .west       { background-color: #ffcc66; }
+    .central    { background-color: #99ff99; }
+    .northeast  { background-color: #ff9999; }
+    .metro      { background-color: #cc99ff; }
+    .southeast  { background-color: #99ccff; }
+  </style>
+</head>
+<body>
+
+<div class="map" id="map"></div>
+
+<script>
+const ascii = `
+                                                                           
+                                               NNNNNNNNNN                 
+    WWWWWWWWWW                                 NNNNNNNNNNN                 
+   WWWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCNNNNNNNNNNNNNNNN             
+   WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCNNNNNNNNNNNNNNNNNN            
+  WWWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCNNNNNNNNNNNNNNNNN             
+  WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCCCMMMMMMMM                  
+  WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCMMMMMMMMMM                  
+  WWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCMMMMMMMMMM                   
+ WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCCCCMMMMMMMM                  
+ WWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCCCCCCMMMMSSSSS                
+WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCCSSSSSSSSSSSSSS               
+WWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCSSSSSSSSSSSSSSSSSS              
+WWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCSSSSSSSSSSSSSSSSSSSSSS     SSSSSSS 
+             WWW               CCCCCCCCSSSSSSSSSSSSSSSSSSSSSSSS     SSSSSSS
+                                           SSSSSSSSSSSSSSSSSSSSS       SSSS
+                                           SSSSSSSSSSSSSSSSSSSSS       SSSS
+                                            SSSSSSSSSSSSSSSSSSSSSS  SSSSSSS
+                                             SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                                               SSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                                                SSSSSSSSSSSSSSSSSSSSSSSSSSS
+                                                 SSSSSSSSS     SSS      SSS
+                                                 SSSSS    SSS              
+                                                         SSSSSSSS      SSS 
+                                                      SSSSSSSSSSS SSSS SSSS
+                                                       SSS         SSSSSSSS
+`;
+
+const regionMap = {
+  'W': { class: 'west', label: 'West' },
+  'C': { class: 'central', label: 'Central' },
+  'N': { class: 'northeast', label: 'Northeast' },
+  'M': { class: 'metro', label: 'Metro' },
+  'S': { class: 'southeast', label: 'Southeast' }
+};
+
+const map = document.getElementById("map");
+
+ascii.trim().split("\n").forEach((line, row) => {
+  line = line.padEnd(75, " ");
+  Array.from(line).forEach((char, col) => {
+    const div = document.createElement("div");
+    div.className = "pixel";
+    if (regionMap[char]) {
+      div.classList.add(regionMap[char].class);
+      div.setAttribute("data-label", regionMap[char].label);
+    }
+    map.appendChild(div);
+  });
+});
+</script>
+
+</body>
+</html>
