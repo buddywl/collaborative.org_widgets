@@ -9,7 +9,6 @@
   <style>
     body {
       font-family: "Newsreader", sans-serif;
-      background: white;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,7 +18,7 @@
     .quiz-container {
       background: #f4faff;
       padding: 20px;
-      border: 2px solid #073763;
+      border: 3px solid #597692;
       border-radius: 10px;
       width: 100%;
       margin: auto;
@@ -29,6 +28,12 @@
       font-family: "Zilla Slab", sans-serif;
     }
     .question {
+      margin-top: 20px;
+    }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       margin-top: 20px;
     }
     button {
@@ -42,7 +47,8 @@
       font-family: "Sono", monospace;
     }
     button:hover {
-      background-color: #597692;
+      background-color: #86a5c2;
+      color: #073763;
     }
     .results {
       margin-top: 20px;
@@ -58,6 +64,31 @@
   <script>
     const quiz = document.getElementById('quiz');
 
+    const schoolRegions = {
+      "North Shore Community College": "Northeast",
+      "Salem State University": "Northeast",
+      "Bristol Community College": "Southeast",
+      "Cape Cod Community College": "Southeast",
+      "Bridgewater State University": "Southeast",
+      "UMass Dartmouth": "Southeast",
+      "Massasoit Community College": "Southeast",
+      "Quinsigamond Community College": "Central",
+      "Fitchburg State University": "Central",
+      "Framingham State University": "Central",
+      "Massachusetts College of Liberal Arts (MCLA)": "Central",
+      "Holyoke Community College": "West",
+      "Springfield Technical Community College (STCC)": "West",
+      "Greenfield Community College": "West",
+      "Westfield State University": "West",
+      "Bay Path University": "West",
+      "Berklee College of Music": "Metro",
+      "Bunker Hill Community College": "Metro",
+      "Roxbury Community College": "Metro",
+      "Cambridge College": "Metro",
+      "Urban College of Boston": "Metro",
+      "Benjamin Franklin Cummings Institute of Technology": "Metro"
+    };
+
     const questions = [
       {
         question: "What are you most interested in?",
@@ -65,13 +96,16 @@
           { text: "Diversity", next: "ethnicity" },
           { text: "Sports", schools: ["Fitchburg State University", "Bridgewater State University", "Framingham State University"] },
           { text: "LGBTQ+ Friendly", schools: ["Berklee College of Music", "Cambridge College", "Urban College of Boston"] },
-          { text: "Historically Women's Colleges", schools: ["Bay Path University"] }
+          { text: "Historically Women's Colleges", schools: ["Bay Path University"] },
+          { text: "STEM Programs", schools: ["Benjamin Franklin Cummings Institute of Technology", "UMass Dartmouth", "Springfield Technical Community College (STCC)", "Quinsigamond Community College"] },
+          { text: "Arts Programs", schools: ["Berklee College of Music", "Salem State University", "Greenfield Community College"] }
         ]
       },
       {
         id: "ethnicity",
-        question: "Which group are you looking for strong representation in?",
+        question: "Are you looking for strong representation in a specific group, if so, which one?",
         options: [
+          { text: "None", schools: ["Benjamin Franklin Cummings Institute of Technology", "Bristol Community College", "Bunker Hill Community College", "Roxbury Community College", "UMass Dartmouth", "Urban College of Boston"] },
           { text: "Asian", schools: ["Bunker Hill Community College", "UMass Dartmouth"] },
           { text: "Latino", schools: ["Urban College of Boston", "Bristol Community College"] },
           { text: "Black", schools: ["Roxbury Community College", "Benjamin Franklin Cummings Institute of Technology"] }
@@ -79,14 +113,15 @@
       }
     ];
 
-    let currentQuestionIndex = 0;
-
     function showQuestion(indexOrId) {
       let questionObj = typeof indexOrId === 'string'
         ? questions.find(q => q.id === indexOrId)
         : questions[indexOrId];
 
       quiz.innerHTML = `<h2>${questionObj.question}</h2>`;
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'button-container';
+
       questionObj.options.forEach(opt => {
         const btn = document.createElement('button');
         btn.textContent = opt.text;
@@ -97,19 +132,36 @@
             showResults(opt.schools);
           }
         };
-        quiz.appendChild(btn);
+        buttonContainer.appendChild(btn);
       });
+
+      quiz.appendChild(buttonContainer);
     }
 
     function showResults(schools) {
       quiz.innerHTML = '<h2>Based on your interest, check out these colleges:</h2>';
       const results = document.createElement('div');
       results.className = 'results';
-      results.innerHTML = '<ul>' + schools.map(s => `<li>${s}</li>`).join('') + '</ul>';
+
+      results.innerHTML = '<ul>' + schools.map(s => {
+        const region = schoolRegions[s] || "Region Unknown";
+        return `<li><strong>${s}</strong> – ${region} Region</li>`;
+      }).join('') + '</ul>';
+
       quiz.appendChild(results);
+
+      const restartBtn = document.createElement('button');
+      restartBtn.textContent = "Restart Quiz";
+      restartBtn.onclick = () => showQuestion(0);
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'button-container';
+      buttonContainer.appendChild(restartBtn);
+
+      quiz.appendChild(buttonContainer);
     }
 
-    showQuestion(currentQuestionIndex);
+    showQuestion(0);
   </script>
 </body>
 </html>
