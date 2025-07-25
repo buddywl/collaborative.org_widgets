@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Sono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader&family=Zilla+Slab&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <title>Massachusetts Regions Map</title>
   <style>
@@ -9,7 +11,7 @@
       display: flex;
       justify-content: center;
       padding: 20px;
-      font-family: sans-serif;
+      font-family: "Sono", sans-serif;
     }
 
     .map {
@@ -54,27 +56,93 @@
     .northeast  { background-color: #ff9999; }
     .metro      { background-color: #cc99ff; }
     .southeast  { background-color: #99ccff; }
+    .out-of-state  { background-color: #073763; }
+
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border: 2px solid #073763;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      z-index: 10;
+      display: none;
+      max-height: 80vh;
+      overflow-y: auto;
+      background-color: #f4faff;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      font-family: "Zilla Slab", sans-serif;
+      color: #073763;
+    }
+
+    .modal ul {
+      list-style: none;
+      padding: 0;
+      font-family: "Newsreader", sans-serif;
+      color: #073763;
+    }
+
+    .modal li {
+      margin-bottom: 10px;
+      font-family: "Newsreader", sans-serif;
+      color: #073763;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.3);
+      z-index: 5;
+      display: none;
+    }
+
+    .close-btn {
+      background: #073763;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      float: right;
+    }
+
+    button {
+      font-family: "Sono", monospace;
+      color: #f4faff;
+    }
   </style>
 </head>
 <body>
 
 <div class="map" id="map"></div>
 
+<div class="overlay" id="overlay"></div>
+<div class="modal" id="modal">
+  <button class="close-btn" onclick="closeModal()">X</button>
+  <h2 id="modal-title"></h2>
+  <ul id="college-list"></ul>
+</div>
+
 <script>
 const ascii = `
 ___________________________________________________________________________
                                                                            
-                                                  NNNNNNN                 
+                                                  NNNNNNN                  
     WWWWWWWWWW                                 NNNNNNNNNNN                
-   WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCNNNNNNNNNNNNNNNNNNNN NN            
-   WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCNNNNNNNNNNNNNNNNNNNNN          
-  WWWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCNNNNNNNNNNNNNNNNNNN           
-  WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCNNNNNNNNNMMNNN                
-  WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCNNNNNNMMMMMMMM                
-  WWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCNNNMMMMMMMMM                 
- WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCNNNNNMMMMMMMM                
- WWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCNNNNSSSSMMSSSS              
-WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCNSSSSSSSSSSSSSS             
+   WWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCNNNNNNNNNNNNNNNNNNNNNNNNN NN            
+   WWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCNNNNNNNNNNNNNNNNNNNNNNNNNN          
+  WWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCCCNNNNNNNNNNNNNNNNNNN           
+  WWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCNNNNNNNNNNMMNNN                
+  WWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCCNNNNNNMMMMMMMM                
+  WWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCCCCNNNMMMMMMMMM                 
+ WWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCNNNNNNNMMMMMMMM                
+ WWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCNNNNNNNSSSSMMSSSS               
+WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCNNNSSSSSSSSSSSSSS             
 WWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCCCCSSSSSSSSSSSSSSSSSSSS           
 WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCSSSSSSSSSSSSSSSSSSSSSSS    SSSSSS 
              WWW               CCCCCCCCSSSSSSSSSSSSSSSSSSSSSSSS     S SSSSS
@@ -86,9 +154,9 @@ WWWWWWWWWWWWWWWWWWWWWWWWWCCCCCCCCCCCCCCCSSSSSSSSSSSSSSSSSSSSSSS    SSSSSS
                                                 SSSSSSSSSSS SSSSSSSSSSSSSSS
                                                  SSSSSSSSS     SSS      SSS
                                                  SSSSS    SSS              
-                                                         SSSSSSSS      SSS 
-                                                      SSSSSSSSSSS SSSS SSSS
-                                                       SSS         SSSSSSSS
+  OO                                                     SSSSSSSS      SSS 
+OOOOOO                                                SSSSSSSSSSS SSSS SSSS
+  OO                                                   SSS         SSSSSSSS
 ___________________________________________________________________________
 `;
 
@@ -97,10 +165,70 @@ const regionMap = {
   'C': { class: 'central', label: 'Central' },
   'N': { class: 'northeast', label: 'Northeast' },
   'M': { class: 'metro', label: 'Metro' },
-  'S': { class: 'southeast', label: 'Southeast' }
+  'S': { class: 'southeast', label: 'Southeast' },
+  'O': { class: 'out-of-state', label: 'Out of State' }
+};
+
+const collegesByRegion = {
+  west: [
+    ["Holyoke Community College", "Community College", "Holyoke"],
+    ["Springfield Technical Community College", "Community College", "Springfield"],
+    ["Greenfield Community College", "Community College", "Greenfield"],
+    ["Westfield State University", "State University", "Westfield"],
+    ["Bay Path University", "Private College", "Springfield"]
+  ],
+  central: [
+    ["Quinsigamond Community College", "Community College", "Worcester"],
+    ["Fitchburg State University", "State University", "Fitchburg"],
+    ["Framingham State University", "State University", "Framingham"],
+    ["Massachusetts College of Liberal Arts", "State University", "North Adams"]
+  ],
+  northeast: [
+    ["North Shore Community College", "Community College", "Lynn, Danvers"],
+    ["Salem State University", "State University", "Salem"]
+  ],
+  metro: [
+    ["Berklee College of Music", "Private College", "Boston, Online"],
+    ["Bunker Hill Community College", "Community College", "Boston, Chelsea"],
+    ["Roxbury Community College", "Community College", "Boston"],
+    ["Cambridge College", "Private College", "Boston"],
+    ["Urban College of Boston", "Private College", "Boston"],
+    ["Benjamin Franklin Cummings Institute of Technology", "Vocational/Technical", "Boston"]
+  ],
+  southeast: [
+    ["Bristol Community College", "Community College", "Fall River, New Bedford, Attleboro"],
+    ["Cape Cod Community College", "Community College", "West Barnstable"],
+    ["Bridgewater State University", "State University", "Bridgewater"],
+    ["UMass Dartmouth", "Public University", "Dartmouth"],
+    ["Massasoit Community College", "Community College", "Brockton, Canton"]
+  ]
 };
 
 const map = document.getElementById("map");
+const modal = document.getElementById("modal");
+const overlay = document.getElementById("overlay");
+const modalTitle = document.getElementById("modal-title");
+const collegeList = document.getElementById("college-list");
+
+function openModal(region) {
+  const regionName = region.charAt(0).toUpperCase() + region.slice(1);
+  modalTitle.textContent = regionName + " Region Colleges";
+  collegeList.innerHTML = "";
+
+  collegesByRegion[region].forEach(([name, type, location]) => {
+    const li = document.createElement("li");
+    li.textContent = `${name} – ${type} (${location})`;
+    collegeList.appendChild(li);
+  });
+
+  overlay.style.display = "block";
+  modal.style.display = "block";
+}
+
+function closeModal() {
+  overlay.style.display = "none";
+  modal.style.display = "none";
+}
 
 ascii.trim().split("\n").forEach((line, row) => {
   line = line.padEnd(75, " ");
@@ -128,6 +256,10 @@ ascii.trim().split("\n").forEach((line, row) => {
         document.querySelectorAll(".pixel").forEach(p => {
           p.classList.remove("hovered", "dimmed");
         });
+      });
+
+      div.addEventListener("click", () => {
+        openModal(regionClass);
       });
     }
 
