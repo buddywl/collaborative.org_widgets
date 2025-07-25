@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Sono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader&family=Zilla+Slab&display=swap" rel="stylesheet">
+  <title>Find Your College Match</title>
+  <style>
+    body {
+      font-family: "Newsreader", sans-serif;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      color: #073763;
+    }
+    .quiz-container {
+      background: #f4faff;
+      padding: 20px;
+      border: 2px solid #073763;
+      border-radius: 10px;
+      width: 100%;
+      margin: auto;
+    }
+    h1, h2 {
+      text-align: center;
+      font-family: "Zilla Slab", sans-serif;
+    }
+    .question {
+      margin-top: 20px;
+    }
+    button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #073763;
+      color: white;
+      cursor: pointer;
+      font-family: "Sono", monospace;
+    }
+    button:hover {
+      background-color: #597692;
+    }
+    .results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Find Your College Match</h1>
+    <div id="quiz"></div>
+  </div>
+
+  <script>
+    const quiz = document.getElementById('quiz');
+
+    const questions = [
+      {
+        question: "What are you most interested in?",
+        options: [
+          { text: "Diversity", next: "ethnicity" },
+          { text: "Sports", schools: ["Fitchburg State University", "Bridgewater State University", "Framingham State University"] },
+          { text: "LGBTQ+ Friendly", schools: ["Berklee College of Music", "Cambridge College", "Urban College of Boston"] },
+          { text: "Historically Women's Colleges", schools: ["Bay Path University"] }
+        ]
+      },
+      {
+        id: "ethnicity",
+        question: "Which group are you looking for strong representation in?",
+        options: [
+          { text: "Asian", schools: ["Bunker Hill Community College", "UMass Dartmouth"] },
+          { text: "Latino", schools: ["Urban College of Boston", "Bristol Community College"] },
+          { text: "Black", schools: ["Roxbury Community College", "Benjamin Franklin Cummings Institute of Technology"] }
+        ]
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    function showQuestion(indexOrId) {
+      let questionObj = typeof indexOrId === 'string'
+        ? questions.find(q => q.id === indexOrId)
+        : questions[indexOrId];
+
+      quiz.innerHTML = `<h2>${questionObj.question}</h2>`;
+      questionObj.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          if (opt.next) {
+            showQuestion(opt.next);
+          } else if (opt.schools) {
+            showResults(opt.schools);
+          }
+        };
+        quiz.appendChild(btn);
+      });
+    }
+
+    function showResults(schools) {
+      quiz.innerHTML = '<h2>Based on your interest, check out these colleges:</h2>';
+      const results = document.createElement('div');
+      results.className = 'results';
+      results.innerHTML = '<ul>' + schools.map(s => `<li>${s}</li>`).join('') + '</ul>';
+      quiz.appendChild(results);
+    }
+
+    showQuestion(currentQuestionIndex);
+  </script>
+</body>
+</html>
